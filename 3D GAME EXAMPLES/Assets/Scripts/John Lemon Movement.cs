@@ -5,21 +5,16 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float turnSpeed = 20;
-    public float moveSpeed = 10f;
-    public float GravityModifier = 1f;
-    public bool IsOnGround = true;
-    public float JumpForce = 10f;
-    private Vector3 _movement;
+    private Vector3 _Movement;
     //private Animator m_Animator;
-    private Rigidbody _rigidbody;
-    private Quaternion _rotation = Quaternion.identity;
+    private Rigidbody _Rigidbody;
+    private Quaternion _Rotation = Quaternion.identity;
 
     // Start is called before the first frame update
     void Start()
     {
-        //m_Animator = GetComponent<Animator>();
-        _rigidbody = GetComponent<Rigidbody>();
-        Physics.gravity *= GravityModifier;
+        //_Animator = GetComponent<Animator>();
+        _Rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -28,33 +23,22 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        _movement.Set(horizontal, 0f, vertical);
-        _movement.Normalize();
+        _Movement.Set(horizontal, 0f, vertical);
+        _Movement.Normalize();
 
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
         bool isWalking = hasHorizontalInput || hasVerticalInput;
-        //M_Animator.SetBool("IsWalking", isWalking);
+        //m_Animator.SetBool("IsWalking", isWalking);
 
-        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, _movement, turnSpeed * Time.deltaTime, 0f);
-        _rotation = Quaternion.LookRotation(desiredForward);
+        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, _Movement, turnSpeed * Time.deltaTime, 0f);
+        _Rotation = Quaternion.LookRotation(desiredForward);
 
-
-        _rigidbody.MovePosition(_rigidbody.position + _movement * moveSpeed * Time.deltaTime);
-        _rigidbody.MoveRotation(_rotation);
-
-        if (Input.GetKeyDown(KeyCode.Space) && IsOnGround)
-        {
-            _playerRb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
-            IsOnGround = false;
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                IsOnGround = true;
-            }
-        }
     }
+
+    //void OnAnimatorMove()
+    //{
+    //m_Rigidbody.MovePosition(_Rigidbody.position + _Movement * //m_Animator.deltaPosition.magnitude);
+    //m_Rigidbody.MoveRotation(m_Rotation);
+    //}
 }
