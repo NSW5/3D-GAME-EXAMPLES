@@ -7,19 +7,27 @@ public class MovingWJohn : MonoBehaviour
     public float turnSpeed = 20;
     public float moveSpeed = 1;
     public float JumpForce = 10f;
+    public float outOfBounds = -10f;
+    public GameObject checkPointAreaObject;
     private Vector3 _Movement;
     public float GravityModifier = 1f;
     public bool IsOnGround = true;
+    public bool isAtCheckpoint = false;
 
     //private Animator m_Animator;
     private Rigidbody _Rigidbody;
     private Quaternion _Rotation = Quaternion.identity;
+    private Vector3 _defaultGravity = new Vector3(0f, -9.81f, 0f);
+    private Vector3 _startingPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         //_Animator = GetComponent<Animator>();
         _Rigidbody = GetComponent<Rigidbody>();
+        Physics.gravity = _defaultGravity;
+        Physics.gravity *= GravityModifier;
+        _startingPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -57,12 +65,28 @@ public class MovingWJohn : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject == checkPointAreaObject)
+        {
+            isAtCheckpoint = true;
+            //Debug.Log(_startingPosition);
+            _startingPosition = checkPointAreaObject.transform.position;
+            //Debug.Log(_startingPosition);
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && IsOnGround)
         {
             _Rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             IsOnGround = false;
+        }
+
+        if(transform.position.y < outOfBounds)
+        {
+            transform.position = _startingPosition;
         }
     }
 }
