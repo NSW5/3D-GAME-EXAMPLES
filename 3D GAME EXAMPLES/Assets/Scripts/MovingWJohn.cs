@@ -19,6 +19,7 @@ public class MovingWJohn : MonoBehaviour
     private Quaternion _Rotation = Quaternion.identity;
     private Vector3 _defaultGravity = new Vector3(0f, -9.81f, 0f);
     private Vector3 _startingPosition;
+    private Vector3 _checkpointPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -71,7 +72,7 @@ public class MovingWJohn : MonoBehaviour
         {
             isAtCheckpoint = true;
             //Debug.Log(_startingPosition);
-            _startingPosition = checkPointAreaObject.transform.position;
+            _checkpointPosition = checkPointAreaObject.transform.position;
             //Debug.Log(_startingPosition);
         }
     }
@@ -86,7 +87,14 @@ public class MovingWJohn : MonoBehaviour
 
         if(transform.position.y < outOfBounds)
         {
-            transform.position = _startingPosition;
+            if (isAtCheckpoint)
+            {
+                transform.position = _checkpointPosition;
+            }
+            else
+            {
+                transform.position = _startingPosition;
+            }
         }
     }
 }
