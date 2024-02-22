@@ -7,10 +7,10 @@ public class NoahsPlayerMovement : MonoBehaviour
     public int score = 0;
     public float turnSpeed = 20;
     public float moveSpeed = 1f;
-    public float JumpForce = 10f;
-    public float GravityModifier = 1f;
+    public float jumpForce = 10f;
+    public float gravityModifier = 1f;
     public float outOfBounds = -10f;
-    public bool IsOnGround = true;
+    public bool isOnGround = true;
     public bool isAtCheckpoint = false;
     public GameObject checkpointAreaObject;
     public GameObject finishAreaObject;
@@ -30,7 +30,7 @@ public class NoahsPlayerMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         Physics.gravity = _defaultGravity;
         //Debug.Log(Physics.gravity);
-        Physics.gravity *= GravityModifier;
+        Physics.gravity *= gravityModifier;
         //Debug.Log(Physics.gravity);
         _startingPostion = transform.position;
         _collectibles = GameObject.FindGameObjectsWithTag("Collectible-Return");
@@ -38,10 +38,10 @@ public class NoahsPlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsOnGround)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
-            _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
-            IsOnGround = false;
+            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isOnGround = false;
         }
 
         if (transform.position.y < outOfBounds)
@@ -92,7 +92,7 @@ public class NoahsPlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            IsOnGround = true;
+            isOnGround = true;
         }
 
         if (collision.gameObject.CompareTag("Spinner"))
@@ -146,5 +146,10 @@ public class NoahsPlayerMovement : MonoBehaviour
             _collectibles[i].SetActive(true);
             _collectibles[i].GetComponent<Collectiable>().ReturnCollectibles();
         }
+    }
+
+    public bool IsPlayerOnGround()
+    {
+        return isOnGround;
     }
 }
