@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Collectible
+  - Collectible-Return
+  - Collectible-Destroy
   layers:
   - Default
   - TransparentFX
